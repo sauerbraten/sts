@@ -8,7 +8,7 @@ servermotd "Welcome to the ^fs^f8${SERVER_REGION}${SERVER_NUM} server^fr for ${T
 maxclients 128
 serverbotlimit 0
 
-exec ${USERS_FILE}
+exec users.cfg
 
 // set to 0 when using a proxy
 updatemaster 1
