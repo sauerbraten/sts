@@ -1,0 +1,53 @@
+table inet filter {
+
+	set sauer_clients {
+		typeof ip saddr
+		flags dynamic
+		size 65536
+		timeout 10m
+	}
+
+	set sauer_pingers {
+		typeof ip saddr
+		flags dynamic
+		size 65536
+		timeout 10m
+	}
+
+	set blackholed {
+		typeof ip saddr
+		flags dynamic
+		size 65536
+		timeout 1h
+		counter
+	}
+
+	set fragginfucker {
+		typeof ip saddr
+		flags constant, interval
+		auto-merge
+		size 8
+		elements = { 75.109.224.0/19, 75.109.0.0/17 }
+	}
+
+	chain ingress {
+		type filter hook ingress device "eth0" priority 0
+		policy accept
+
+		# drop all traffic from blackholed IPs as early as possible
+		ip saddr @blackholed drop
+
+		# drop all traffic from fragginfucker
+		ip saddr @fragginfucker drop
+	}
+
+	chain input {
+		# drop overlong info pings
+		udp dport { 1001, 2001, 3001, 4001 } udp length > 60 update @blackholed { ip saddr } log level info prefix "blackholed for overlong packet on info port: " drop
+		# rate limit traffic that looks legit
+		udp dport { 1000, 2000, 3000, 4000 } update @sauer_clients { ip saddr limit rate over 100/second } update @blackholed { ip saddr } log level info prefix "blackholed for exceeding 100pps rate limit on game port: " drop
+		udp dport { 1001, 2001, 3001, 4001 } update @sauer_pingers { ip saddr limit rate over 10/second } update @blackholed { ip saddr } log level info prefix "blackholed for exceeding 10pps rate limit on info port: " drop
+		udp dport { 1000, 1001, 2000, 2001, 3000, 3001, 4000, 4001 } accept
+	}
+
+}

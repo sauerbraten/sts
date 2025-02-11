@@ -1,1 +1,4 @@
 .vscode
+player.cfg
+admin.cfg
+*.tar.gz

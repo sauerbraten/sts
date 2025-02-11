@@ -1,0 +1,25 @@
+#!/sbin/openrc-run
+
+description="p1xbraten server"
+command="/root/p1xbraten_server"
+
+prepare_config()
+{
+    mkdir -p ${homedir}
+    set -a && source /root/config.env && set +a
+    SERVER_NUM=${server_num} envsubst </root/server-init.cfg.tpl >${homedir}/server-init.cfg
+}
+
+start_pre() {
+	if [ "$server_num" = "$RC_SVCNAME" ]; then
+		eerror "${RC_SVCNAME} cannot be started directly. You must create"
+		eerror "symbolic links to it for the instances you want to start."
+		return 1
+	fi
+    prepare_config
+}
+
+stop_post() {
+    mkdir -p /root/archived
+    mv "${homedir}" "${archivedir}"
+}

@@ -1,0 +1,16 @@
+supervisor="supervise-daemon"
+
+# if /etc/init.d/p1xbraten.1 is a symlink to /etc/init.d/p1xbraten,
+# server_num will be 1, and the server will listen on port 1000.
+server_num="${RC_SVCNAME#*.}"
+
+# instance-specific "home" directory
+homedir="/root/servers/${server_num}"
+# directory where to archive the home directory when the service is stopped
+archivedir="/root/archived/${server_num}_$(date -Iseconds)"
+
+# make sure all logs show up where we expect them
+supervise_daemon_args="--stdout ${homedir}/logs.txt --stderr ${homedir}/logs.txt"
+
+# use home directory, but also /root for loading resources like users.cfg and maps
+command_args="-q${homedir} -k/root/"

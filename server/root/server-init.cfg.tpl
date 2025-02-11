@@ -1,20 +1,18 @@
-serverip "${LISTEN_ADDRESS}"
+serverip "0.0.0.0"
 serverport ${SERVER_NUM}000
 
 serverdesc "${SERVER_DESCRIPTION} ${SERVER_REGION}${SERVER_NUM}"
 
-servermotd "Welcome to the ^fs^f8${SERVER_REGION}${SERVER_NUM} server^fr for ${TOURNEY_NAME}!"
+servermotd "Welcome to the ^fs^f8${SERVER_REGION}${SERVER_NUM}^fr server for ^fs^f8${TOURNEY_NAME}^fr!"
 
 maxclients 128
 serverbotlimit 0
 
-exec users.cfg
-
-// set to 0 when using a proxy
+// set to 0 when using a proxy, to not leak the server IP on the master list
 updatemaster 1
 
-// instead, this proxy will register with the master (and we trust it to forward us the real IPs)
-addtrustedproxyip "${PROXY_IP}"
+// if updatemaster is 0, the proxy set here register with the master instead (and we trust it to forward us the real IPs)
+//addtrustedproxyip "${PROXY_IP}"
 
 // disable 'private' mode
 publicserver 2
@@ -41,6 +39,5 @@ overtime 1
 // start with default map rotation
 exec default_map_rotation.cfg
 
-// and last but not least, ban fragginfucker for good measure
-75.109.224.0/19
-75.109.0.0/17
+// configure local auth
+exec users.cfg
