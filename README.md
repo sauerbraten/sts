@@ -1,4 +1,4 @@
-# Sauerworld Tournament Servers
+# Sauerworld Tourney Servers
 
 This repository has everything you need to deploy four p1xbraten servers each on one or more Alpine Linux VPS, plus `make` commands to generate the corresponding `/tourney` cubescript.
 
@@ -15,7 +15,7 @@ This repository has everything you need to deploy four p1xbraten servers each on
 
 ## Prerequisites
 
-You need a Linux VPS running Alpine Linux with a public IPv4 for this. Hetzner's CX22 or CAX11 work nicely, with the latter scoring higher in benchmarks for the same price. Pick the Nuremberg data center (most players are located in the EU).
+You need a Alpine Linux box with a public IPv4 for this. Hetzner's CX22 or CAX11 "Cloud Servers" work nicely, with the latter scoring higher in benchmarks for the same price. Pick the Nuremberg data center (most players are located in the EU).
 
 > In order to register with the master server, outgoing traffic needs to originate from the ingress IP. Also, you need to be able to listen on two UDP ports per instance. Most "serverless" container hosting services will not work for those reasons. Fly.io at least supports UDP on arbitrary ports, but you won't be able to register with the master server since outgoing TCP traffic uses IPs you can't listen on. Plain old virtual Linux boxes usually don't have all these problems, and are billed by the hour these days, so just use those.
 
