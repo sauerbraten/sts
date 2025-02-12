@@ -1,5 +1,6 @@
-table inet filter {
+#!/usr/sbin/nft -f
 
+table inet filter {
 	set sauer_clients {
 		typeof ip saddr
 		flags dynamic
@@ -31,7 +32,7 @@ table inet filter {
 	}
 
 	chain ingress {
-		type filter hook ingress device "eth0" priority 0
+		type filter hook ingress device "eth0" priority raw
 		policy accept
 
 		# drop all traffic from blackholed IPs as early as possible
@@ -45,9 +46,8 @@ table inet filter {
 		# drop overlong info pings
 		udp dport { 1001, 2001, 3001, 4001 } udp length > 60 update @blackholed { ip saddr } log level info prefix "blackholed for overlong packet on info port: " drop
 		# rate limit traffic that looks legit
-		udp dport { 1000, 2000, 3000, 4000 } update @sauer_clients { ip saddr limit rate over 100/second } update @blackholed { ip saddr } log level info prefix "blackholed for exceeding 100pps rate limit on game port: " drop
-		udp dport { 1001, 2001, 3001, 4001 } update @sauer_pingers { ip saddr limit rate over 10/second } update @blackholed { ip saddr } log level info prefix "blackholed for exceeding 10pps rate limit on info port: " drop
+		udp dport { 1000, 2000, 3000, 4000 } update @sauer_clients { ip saddr limit rate over 100/second } update @blackholed { ip saddr } log level info prefix "blackholed for exceeding 100pps on game port: " drop
+		udp dport { 1001, 2001, 3001, 4001 } update @sauer_pingers { ip saddr limit rate over 10/second } update @blackholed { ip saddr } log level info prefix "blackholed for exceeding 10pps on info port: " drop
 		udp dport { 1000, 1001, 2000, 2001, 3000, 3001, 4000, 4001 } accept
 	}
-
 }

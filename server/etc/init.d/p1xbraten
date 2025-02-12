@@ -2,24 +2,33 @@
 
 description="p1xbraten server"
 command="/root/p1xbraten_server"
+supervisor="supervise-daemon"
+respawn_period=30
 
-prepare_config()
-{
-    mkdir -p ${homedir}
-    set -a && source /root/config.env && set +a
-    SERVER_NUM=${server_num} envsubst </root/server-init.cfg.tpl >${homedir}/server-init.cfg
-}
+# if /etc/init.d/p1xbraten.1 is a symlink to /etc/init.d/p1xbraten,
+# server_num will be 1, and the server will listen on port 1000.
+server_num="${RC_SVCNAME#*.}"
+
+# instance-specific "home" directory
+homedir="/root/servers/${server_num}"
+
+# make sure all logs show up where we expect them
+supervise_daemon_args="--stdout ${homedir}/logs.txt --stderr ${homedir}/logs.txt"
+
+# use home directory, but also /root for loading resources like users.cfg and maps
+command_args="-q${homedir} -k/root/"
 
 start_pre() {
-	if [ "$server_num" = "$RC_SVCNAME" ]; then
-		eerror "${RC_SVCNAME} cannot be started directly. You must create"
-		eerror "symbolic links to it for the instances you want to start."
-		return 1
-	fi
-    prepare_config
+    if [ "$server_num" = "$RC_SVCNAME" ]; then
+        eerror "${RC_SVCNAME} cannot be started directly. You must create"
+        eerror "symbolic links to it for the instances you want to start."
+        return 1
+    fi
 }
 
 stop_post() {
-    mkdir -p /root/archived
+    local archivedir
+    archivedir="/root/archived/${server_num}_$(date -Iseconds)"
+    mkdir -p "${archivedir}"
     mv "${homedir}" "${archivedir}"
 }

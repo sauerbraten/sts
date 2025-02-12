@@ -32,7 +32,7 @@ If you need another server in a different region, repeat these steps (or just cr
 Pre-flight checklist:
 
 1. Update the config at the top of the [Makefile](./Makefile). You need the server IP(s) in the SERVER_ALLOCATION variable!
-2. Review [server/root/server-init.cfg.tpl](./server/root/server-init.cfg.tpl), especially `updatemaster` (make sure it's 0 when using a proxy)
+2. Review [server/root/server.cfg.tpl](./server/root/server.cfg.tpl), especially `updatemaster` (make sure it's 0 when using a proxy)
 3. Make sure [server/root/users.cfg](./server/root/users.cfg) contains the desired auth domain and a key for each tournament admin, with 'a' (admin) permissions
 
 To deploy the servers, run `make servers`. This will generate tarballs of scripts and configuration, copy them to the server, then set up four p1xbraten services. Wait for everything to finish, then verify that p1xbraten is listening on ports 1000, 2000, 3000, 4000 (and more).

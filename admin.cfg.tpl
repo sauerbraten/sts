@@ -3,7 +3,6 @@ tourney_announce_pool = [
         servcmd do (format "sendservmsg %1" (escape $msg))
     ]
 ]
-
 tourney_announce_match = [ // <team/player 1> <team/player 2> <server>
     local p1 p2 srv
     p1 = $arg1; p2 = $arg2; srv = (? (getalias arg3) $arg3 "this server")
@@ -11,7 +10,6 @@ tourney_announce_match = [ // <team/player 1> <team/player 2> <server>
         servcmd do (format "sendservmsg %1" (escape $msg))
     ]
 ]
-
 tourney_spec_all = [ // [<team>]
     looplist cn (listclients 1 1 0 $arg1) [spectator 1 $cn]
 ]

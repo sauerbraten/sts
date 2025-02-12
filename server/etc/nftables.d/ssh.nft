@@ -1,8 +1,7 @@
-table inet filter {
+#!/usr/sbin/nft -f
 
+table inet filter {
 	chain input {
-		# SSH (port 22)
 		tcp dport ssh accept
 	}
-
 }
