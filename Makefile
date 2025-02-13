@@ -1,7 +1,7 @@
 export
-TOURNEY_NAME       ?= Weekly FFA
-TOURNEY_MAP_POOL   ?= ot turbine hashi
-SERVER_ALLOCATION  ?= EU=135.181.111.59# NA=2.3.4.5
+TOURNEY_NAME      ?= Weekly FFA
+TOURNEY_MAP_POOL  ?= ot turbine hashi
+SERVER_ALLOCATION ?= EU=135.181.111.59# NA=2.3.4.5
 
 check-config:
 ifndef TOURNEY_NAME
@@ -25,16 +25,20 @@ server-%:
 	$(MAKE) -C server clean deploy
 
 artifacts: $(foreach srv,${SERVER_ALLOCATION},artifacts-${srv})
+artifacts:
+ifndef SERVER_ALLOCATION
+	$(error SERVER_ALLOCATION is undefined)
+endif
 
 artifacts-%: parts=$(subst =, ,$*)
-artifacts-%: IP=$(word 2,${parts})
+artifacts-%: ip=$(word 2,${parts})
 artifacts-%:
-ifeq (${IP},)
-	$(error server IP missing)
+ifneq ($(wildcard ./${ip}),)
+	$(error refusing to overwrite existing artifacts)
 endif
-	mkdir -p "${NA_IP}"
-	scp -r root@${NA_IP}:/root/servers/* "${NA_IP}/" || \
-		scp -r root@${NA_IP}:/root/archived/* "${NA_IP}/"
+	mkdir "${ip}"
+	scp -r root@${ip}:/root/servers/* "${ip}/" || \
+		scp -r root@${ip}:/root/archived/* "${ip}/"
 
 scripts: player.cfg admin.cfg
 .PHONY: scripts

@@ -25,6 +25,7 @@ compile() {
     make server || exit
     strip sauer_server
     mv sauer_server ../p1xbraten_server
+    cd ..
 }
 
 version=$(get_p1xbraten_version)

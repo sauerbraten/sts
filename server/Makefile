@@ -5,9 +5,9 @@ endif
 ifndef SERVER_REGION
 	$(error SERVER_REGION is undefined)
 endif
-	echo 'defsvar sts_tourney_name "${TOURNEY_NAME}"' > root/vars.cfg
-	echo 'defsvar sts_region "${SERVER_REGION}"'     >> root/vars.cfg
-	echo 'defsvar sts_proxy_ip "${PROXY_IP}"'        >> root/vars.cfg
+	echo 'sts_tourney_name = "${TOURNEY_NAME}"' > root/vars.cfg
+	echo 'sts_region = "${SERVER_REGION}"'     >> root/vars.cfg
+	echo 'sts_proxy_ip = "${PROXY_IP}"'        >> root/vars.cfg
 .PHONY: root/vars.cfg
 
 overlay.tar.gz: root/vars.cfg
@@ -27,8 +27,7 @@ ifndef SERVER_IP
 	$(info "SERVER_IP is undefined, skipping deployment")
 else
 	scp $< root@${SERVER_IP}:/root/
-	ssh root@${SERVER_IP} "tar -xzvf $< -C /"
-	ssh root@${SERVER_IP} "./setup.sh"
+	ssh root@${SERVER_IP} "tar -xzf $< -C / && rm $< && ./setup.sh"
 	ssh root@${SERVER_IP} "netstat -anup | grep p1x"
 endif
 
