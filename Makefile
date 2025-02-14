@@ -33,9 +33,6 @@ endif
 artifacts-%: parts=$(subst =, ,$*)
 artifacts-%: ip=$(word 2,${parts})
 artifacts-%:
-ifneq ($(wildcard ./${ip}),)
-	$(error refusing to overwrite existing artifacts)
-endif
 	mkdir "${ip}"
 	scp -r root@${ip}:/root/servers/* "${ip}/" || \
 		scp -r root@${ip}:/root/archived/* "${ip}/"
