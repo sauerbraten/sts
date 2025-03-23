@@ -1,7 +1,7 @@
 export
-TOURNEY_NAME      ?= Weekly FFA
-TOURNEY_MAP_POOL  ?= ot turbine hashi
-SERVER_ALLOCATION ?= EU=135.181.111.59# NA=2.3.4.5
+TOURNEY_NAME      ?= INSTA - STS \#1
+TOURNEY_MAP_POOL  ?= complex douze duel7 kffa memento ot turbine
+SERVER_ALLOCATION ?= EU=91.99.24.140# NA=2.3.4.5
 
 check-config:
 ifndef TOURNEY_NAME

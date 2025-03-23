@@ -1,6 +1,6 @@
 #!/bin/ash
 
-# undos everything in setup.sh
+# undos everything in setup.sh, and deletes everything copied onto the server by `make servers`
 
 for i in $(seq 1 4); do
     rc-service p1xbraten.$i stop || true
@@ -15,3 +15,6 @@ rm -f p1xbraten_server
 
 rc-service nftables stop || true
 rc-update del nftables boot || true
+
+rm -f default_map_rotation.cfg destroy.sh server.cfg setup.sh update_p1xbraten_binary.sh users.cfg vars.cfg
+rm -f /etc/nftables.d/*.nft
