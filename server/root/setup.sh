@@ -1,9 +1,9 @@
 #!/bin/ash
 
 apk upgrade --update-cache
-apk add --upgrade nftables libstdc++ envsubst
+apk add --upgrade nftables
 
-# basic firewall, see /etc/nftables.d/sauer.nft
+# basic firewall, see /etc/nftables.d/p1xbraten.nft
 rc-update add nftables boot
 rc-service nftables start
 
@@ -14,7 +14,7 @@ rc-service nftables start
 wget -q -O - https://static.p1x.pw/slim_ogzs.tar.gz | tar -xzof -
 
 # register and start services
-for i in $(seq 1 4); do
+for i in $(seq 1 8); do
     ln -s /etc/init.d/p1xbraten /etc/init.d/p1xbraten.$i
     rc-update add p1xbraten.$i default
     rc-service p1xbraten.$i start

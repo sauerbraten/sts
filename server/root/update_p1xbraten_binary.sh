@@ -1,6 +1,6 @@
 #!/bin/ash
 
-apk add --upgrade curl make clang19 zlib-dev
+apk add --upgrade curl make clang19 libstdc++ zlib-dev
 
 get_p1xbraten_version() {
     echo $(basename "$(curl -s -o /dev/null -w '%{redirect_url}' https://github.com/sauerbraten/p1xbraten/releases/latest)")

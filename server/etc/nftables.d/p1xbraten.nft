@@ -44,10 +44,10 @@ table inet filter {
 
 	chain input {
 		# drop overlong info pings
-		udp dport { 1001, 2001, 3001, 4001 } udp length > 60 update @blackholed { ip saddr } log level info prefix "blackholed for overlong packet on info port: " drop
+		udp dport { 1001, 2001, 3001, 4001, 5001, 6001, 7001, 8001 } udp length > 60 update @blackholed { ip saddr } log level info prefix "blackholed for overlong packet on info port: " drop
 		# rate limit traffic that looks legit
-		udp dport { 1000, 2000, 3000, 4000 } update @sauer_clients { ip saddr limit rate over 100/second } update @blackholed { ip saddr } log level info prefix "blackholed for exceeding 100pps on game port: " drop
-		udp dport { 1001, 2001, 3001, 4001 } update @sauer_pingers { ip saddr limit rate over 10/second } update @blackholed { ip saddr } log level info prefix "blackholed for exceeding 10pps on info port: " drop
-		udp dport { 1000, 1001, 2000, 2001, 3000, 3001, 4000, 4001 } accept
+		udp dport { 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000 } update @sauer_clients { ip saddr limit rate over 1000/second } update @blackholed { ip saddr } log level info prefix "blackholed for exceeding 1000pps on game port: " drop
+		udp dport { 1001, 2001, 3001, 4001, 5001, 6001, 7001, 8001 } update @sauer_pingers { ip saddr limit rate over 100/second } update @blackholed { ip saddr } log level info prefix "blackholed for exceeding 100pps on info port: " drop
+		udp dport { 1000, 1001, 2000, 2001, 3000, 3001, 4000, 4001, 5000, 5001, 6000, 6001, 7000, 7001, 8000, 8001 } accept
 	}
 }

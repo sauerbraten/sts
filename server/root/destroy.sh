@@ -2,7 +2,7 @@
 
 # undos everything in setup.sh, and deletes everything copied onto the server by `make servers`
 
-for i in $(seq 1 4); do
+for i in $(seq 1 8); do
     rc-service p1xbraten.$i stop || true
     rc-update del p1xbraten.$i default || true
     rm -f /etc/init.d/p1xbraten.$i

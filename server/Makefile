@@ -11,16 +11,7 @@ endif
 .PHONY: root/vars.cfg
 
 overlay.tar.gz: root/vars.cfg
-	@# to ensure all the files are owned by root, we use a Dockerfile
-	podman build \
-		--quiet \
-		--security-opt label=disable \
-		--build-arg OUTFILE="$@" \
-		--volume=$(shell pwd):/out \
-		--tag alpine-p1x-overlay \
-		.
-	@# we abuse the build step as VM, we don't actually need the image
-	podman rmi alpine-p1x-overlay >/dev/null
+	tar --create --gzip --verbose --owner=root --group=root --file "$@" etc root
 
 deploy: overlay.tar.gz
 ifndef SERVER_IP
