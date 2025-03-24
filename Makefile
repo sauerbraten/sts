@@ -1,7 +1,7 @@
 export
 TOURNEY_NAME      ?= INSTA - STS \#1
 TOURNEY_MAP_POOL  ?= complex douze duel7 kffa memento ot turbine
-SERVER_ALLOCATION ?= EU=1.2.3.4.=2.3.4.5# <region>=<server IP>[=<proxy IP>] ...
+SERVER_ALLOCATION ?= EU=1.2.3.4=2.3.4.5 NA=3.4.5.6=4.5.6.7# <region>=<server IP>[=<proxy IP>] ...
 
 check-config:
 ifndef TOURNEY_NAME
@@ -50,20 +50,17 @@ artifacts-%:
 		scp -r root@${ip}:/root/archived/* "${ip}/"
 
 
-scripts: player.cfg admin.cfg
+scripts: admins.cfg participants.cfg
 .PHONY: scripts
 
 # CLEANED_ALLOCATION drops the proxy IPs from SERVER_ALLOCATION
-player.cfg: CLEANED_ALLOCATION=$(shell echo ${SERVER_ALLOCATION} | sed -E 's/([0-9])=([0-9]+\.?){4}/\1/g')
-player.cfg: check-config
-	envsubst < base.cfg.tpl > player.cfg
-	cat player.cfg.tpl >> player.cfg
-.PHONY: player.cfg
-
-admin.cfg: player.cfg
-	cp -f player.cfg admin.cfg
-	cat admin.cfg.tpl >> admin.cfg
-.PHONY: admin.cfg
+admins.cfg participants.cfg: CLEANED_ALLOCATION=$(shell echo ${SERVER_ALLOCATION} | sed -E 's/([0-9])=([0-9]+\.?){4}/\1/g')
+admins.cfg participants.cfg:
+	cp -f "$@.tpl" "$@"
+	sed -i 's/<tourney_name>/${TOURNEY_NAME}/g' "$@"
+	sed -i 's/<tourney_map_pool>/${TOURNEY_MAP_POOL}/g' "$@"
+	sed -i 's/<server_allocation>/${CLEANED_ALLOCATION}/g' "$@"
+.PHONY: admins.cfg participants.cfg
 
 
 clean:

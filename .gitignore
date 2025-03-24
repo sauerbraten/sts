@@ -1,5 +1,5 @@
 .vscode
-player.cfg
-admin.cfg
-server/root/vars.cfg
 *.tar.gz
+server/root/vars.cfg
+admins.cfg
+participants.cfg
