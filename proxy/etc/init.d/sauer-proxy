@@ -1,0 +1,26 @@
+#!/sbin/openrc-run
+
+description="sauerbraten proxy"
+command="/root/sauer-proxy.sh"
+supervisor="supervise-daemon"
+respawn_period=30
+
+# if /etc/init.d/sauer-proxy.1 is a symlink to /etc/init.d/sauer-proxy,
+# server_num will be 1, and the proxy will forward traffic for server 1 on port 1000.
+server_num="${RC_SVCNAME#*.}"
+
+# instance-specific "home" directory
+homedir="/root/proxies/${server_num}"
+
+# make sure all logs show up where we expect them
+supervise_daemon_args="--stdout ${homedir}/logs.txt --stderr ${homedir}/logs.txt"
+
+command_args="${server_num}"
+
+start_pre() {
+    if [ "$server_num" = "$RC_SVCNAME" ]; then
+        eerror "${RC_SVCNAME} cannot be started directly. You must create"
+        eerror "symbolic links to it for the instances you want to start."
+        return 1
+    fi
+}
