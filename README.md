@@ -8,9 +8,9 @@ This repository has everything you need to deploy four p1xbraten servers each on
   - [`/pool`](#pool)
   - [`/tourney`](#tourney)
 - [Admin commands](#admin-commands)
-  - [`/tourney_announce_pool`](#tourney_announce_pool)
-  - [`/tourney_announce_match <p1> <p2> <server>`](#tourney_announce_match-p1-p2-server)
-  - [`/tourney_spec_all [<team>]`](#tourney_spec_all-team)
+  - [`/announcepool`](#announcepool)
+  - [`/announcematch <p1> <p2> <server>`](#announcematch-p1-p2-server)
+  - [`/specall [<team>]`](#specall-team)
 - [Afterwards](#afterwards)
 
 ## Prerequisites
@@ -55,15 +55,15 @@ Opens a GUI with buttons to connect to the tourney servers.
 
 ## Admin commands
 
-### `/tourney_announce_pool`
+### `/announcepool`
 
 Prints the map pool to the console of everyone on the server.
 
-### `/tourney_announce_match <p1> <p2> <server>`
+### `/announcematch <p1> <p2> <server>`
 
 Announces an upcoming match to everyone on the server. For example: `/tourney_announce_match w00p RB EU2`.
 
-### `/tourney_spec_all [<team>]`
+### `/specall [<team>]`
 
 Moves all players to spectator. If you pass a team name, only players in that team are moved to spec.
 
